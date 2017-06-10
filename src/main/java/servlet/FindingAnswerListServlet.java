@@ -1,5 +1,6 @@
 package servlet;
 
+import common.PythonSocket;
 import common.SearchingParameter;
 import data_provider.Provider;
 import model.Answer;
@@ -47,11 +48,15 @@ public class FindingAnswerListServlet extends HttpServlet {
                 for(Answer answer: candidateList)
                     answerMap.put(answer.getDeepLearingForm(), answer);
 
-                ///soket işlemleri
+                //sokete mesaj at ve cevap gelene kdr bekle
+                List<Answer> orderedCandidateList = null;
+                if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
+                    orderedCandidateList = fileOperator.parseOutput(answerMap);
+                } else {
+                    System.out.println("hata oluştu");
+                }
 
                 ////hazır olduktan sonra dosya okunacak
-                List<Answer> orderedCandidateList = fileOperator.parseOutput(answerMap);
-
                 session.setAttribute("cevap", 1);
                 session.setAttribute("answerList", orderedCandidateList); //burası değişecek !!!!!
             } catch (Exception ex) {
