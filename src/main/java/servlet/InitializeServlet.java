@@ -1,5 +1,6 @@
 package servlet;
 
+import common.PythonSocket;
 import common.SearchingParameter;
 
 import javax.servlet.ServletException;
@@ -20,6 +21,7 @@ public class InitializeServlet extends HttpServlet {
         session.setAttribute("threshold", SearchingParameter.getThreshold());
         session.setAttribute("answercount", SearchingParameter.getAnswerCount());
         response.sendRedirect("developermode.jsp");
+        new PythonSocket();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

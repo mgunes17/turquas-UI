@@ -39,13 +39,19 @@ public class FileOperator {
             String answer = bufferedReader.readLine();
             double similarity = Double.parseDouble(bufferedReader.readLine());
 
-            while (answer != null) {
+            boolean finished = false;
+            while (!finished) {
+                System.out.println(answer);
                 Answer answer1 = answerMap.get(answer);
                 answer1.setSimilarityValue(similarity);
                 answerList.add(answerMap.get(answer));
 
                 answer = bufferedReader.readLine();
-                similarity = Double.parseDouble(bufferedReader.readLine());
+                if(answer != null) {
+                    similarity = Double.parseDouble(bufferedReader.readLine());
+                } else {
+                    finished = true;
+                }
             }
 
             bufferedReader.close();
