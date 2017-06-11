@@ -10,9 +10,7 @@ import org.jsoup.select.Elements;
 import zemberek.tokenization.TurkishSentenceExtractor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mustafa on 10.06.2017.
@@ -26,8 +24,8 @@ public class GoogleProvider implements Provider {
         Elements results = fetchGoogleSearchResult(searchableForm);
         List<String> sourceLinks = findSourceLinks(results);
         List<Answer> sentenceList = fetchSentenceList(sourceLinks);
-        Set<Answer> candidateList = new AnswerOperator().chooseCandidateSentences(sentenceList);
-        return candidateList;
+        Set<Answer> candidateSet = new AnswerOperator().chooseCandidateSentences(sentenceList);
+        return candidateSet;
     }
 
     protected String convertSearchableForm(String questionText) {

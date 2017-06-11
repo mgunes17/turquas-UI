@@ -16,10 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mustafa on 10.06.2017.
@@ -27,31 +24,35 @@ import java.util.Set;
 @WebServlet(name = "FindingAnswerListServlet" , urlPatterns = {"/findinganswers"})
 public class FindingAnswerListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         String questionText = request.getParameter("question").toLowerCase();
         QuestionOperator questionOperator = new QuestionOperator();
+        FileOperator fileOperator = new FileOperator();
 
         if(!questionOperator.validateQuestion(questionText)) {
             session.setAttribute("cevap", 2);
         } else {
             try {
+                fileOperator.writeUserQuestionToFile(questionText);
                 Question question = questionOperator.createQuestion(questionText);
                 Provider provider = SearchingParameter.getProvider();
-                Set<Answer> candidateList = provider.findCandidateList(question);
+                Set<Answer> candidateSet = provider.findCandidateList(question);
 
                 AnswerOperator answerOperator = new AnswerOperator();
-                answerOperator.preparaForDeepLearningText(candidateList);
-                FileOperator fileOperator = new FileOperator();
-                fileOperator.saveListForDeepLearning(candidateList);
+                answerOperator.preparaForDeepLearningText(candidateSet);
+                Map<String, Answer> candidateMap = answerOperator.convertSetToMap(candidateSet);
 
-                Map<String, Answer> answerMap = new HashMap<String, Answer>();
-                for(Answer answer: candidateList)
-                    answerMap.put(answer.getDeepLearingForm(), answer);
+                candidateSet = new HashSet<Answer>();
+                for(String answer: candidateMap.keySet())
+                    candidateSet.add(candidateMap.get(answer));
+
+                fileOperator.saveListForDeepLearning(candidateSet);
 
                 //sokete mesaj at ve cevap gelene kdr bekle
                 List<Answer> orderedCandidateList = null;
                 if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
-                    orderedCandidateList = fileOperator.parseOutput(answerMap);
+                    orderedCandidateList = fileOperator.parseOutput(candidateMap);
                 } else {
                     System.out.println("hata oluştu");
                 }

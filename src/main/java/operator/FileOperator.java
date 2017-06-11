@@ -86,4 +86,17 @@ public class FileOperator {
 
         return stopWordSet;
     }
+
+    public void writeUserQuestionToFile(String question) {
+        File file = new File(FilePath.QUESTION_FILE_NAME);
+
+        try {
+            FileWriter fileWriter = new FileWriter(file);
+            fileWriter.write(question);
+            fileWriter.close();
+            System.out.println("Dosya başarıyla oluşturuldu");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

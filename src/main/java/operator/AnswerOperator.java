@@ -5,9 +5,7 @@ import model.Answer;
 import zemberek.langid.LanguageIdentifier;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by mustafa on 10.06.2017.
@@ -69,5 +67,14 @@ public class AnswerOperator {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public Map<String, Answer> convertSetToMap(Set<Answer> answerSets) {
+        Map<String, Answer> answerMap = new HashMap<String, Answer>();
+
+        for(Answer answer: answerSets)
+            answerMap.put(answer.getDeepLearingForm(), answer);
+
+        return answerMap;
     }
 }
