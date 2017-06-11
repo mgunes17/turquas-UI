@@ -1,6 +1,6 @@
 package operator;
 
-import model.Question;
+import model.QuestionUI;
 
 /**
  * Created by mustafa on 10.06.2017.
@@ -11,8 +11,8 @@ public class QuestionOperator {
         return true;
     }
 
-    public Question createQuestion(String questionText) {
+    public QuestionUI createQuestion(String questionText) {
         //kuralları çıkar kelimelere ayır vs
-        return new Question(questionText);
+        return new QuestionUI(questionText);
     }
 }

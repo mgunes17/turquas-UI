@@ -4,7 +4,7 @@ import common.PythonSocket;
 import common.SearchingParameter;
 import data_provider.Provider;
 import model.Answer;
-import model.Question;
+import model.QuestionUI;
 import operator.AnswerOperator;
 import operator.FileOperator;
 import operator.QuestionOperator;
@@ -16,7 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by mustafa on 10.06.2017.
@@ -27,6 +30,7 @@ public class FindingAnswerListServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
         String questionText = request.getParameter("question").toLowerCase();
+        session.setAttribute("question", request.getParameter("question"));
         QuestionOperator questionOperator = new QuestionOperator();
         FileOperator fileOperator = new FileOperator();
 
@@ -35,9 +39,9 @@ public class FindingAnswerListServlet extends HttpServlet {
         } else {
             try {
                 fileOperator.writeUserQuestionToFile(questionText);
-                Question question = questionOperator.createQuestion(questionText);
+                QuestionUI questionUI = questionOperator.createQuestion(questionText);
                 Provider provider = SearchingParameter.getProvider();
-                Set<Answer> candidateSet = provider.findCandidateList(question);
+                Set<Answer> candidateSet = provider.findCandidateList(questionUI);
 
                 if(candidateSet.size() == 0) {
                     session.setAttribute("cevap", 4); //Aday cümle bulunamadı

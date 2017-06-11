@@ -3,13 +3,13 @@ package model;
 /**
  * Created by mustafa on 10.06.2017.
  */
-public class Question {
+public class QuestionUI {
     private String question;
 
-    public Question() {
+    public QuestionUI() {
     }
 
-    public Question(String question) {
+    public QuestionUI(String question) {
         this.question = question;
     }
 

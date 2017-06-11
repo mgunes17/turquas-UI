@@ -1,7 +1,7 @@
 package data_provider;
 
 import model.Answer;
-import model.Question;
+import model.QuestionUI;
 import operator.AnswerOperator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,17 +11,19 @@ import zemberek.tokenization.TurkishSentenceExtractor;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by mustafa on 10.06.2017.
  */
 public class GoogleProvider implements Provider {
-    public static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
-    public static final int RESULT_LINK_COUNT = 5;
+    private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
+    private static final int RESULT_LINK_COUNT = 5;
 
-    public Set<Answer> findCandidateList(Question question) throws IOException {
-        String searchableForm = convertSearchableForm(question.getQuestion());
+    public Set<Answer> findCandidateList(QuestionUI questionUI) throws IOException {
+        String searchableForm = convertSearchableForm(questionUI.getQuestion());
         Elements results = fetchGoogleSearchResult(searchableForm);
         List<String> sourceLinks = findSourceLinks(results);
         List<Answer> sentenceList = fetchSentenceList(sourceLinks);

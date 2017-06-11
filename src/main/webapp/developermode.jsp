@@ -46,8 +46,8 @@
         <div class="col-md-4">
             <form method="POST" action="/findinganswers">
                 <div class="form-group">
-                    <label for="question">Sor bakalım..</label>
-                    <input type="text" id="question" class="form-control" name="question" value="${question}">
+                    <label for="questionUI">Sor bakalım..</label>
+                    <input type="text" id="questionUI" class="form-control" name="question" value="${question}">
                     <input type="submit" class="btn btn-primary center-block" value="Cevapla"/>
                 </div>
             </form>
@@ -129,9 +129,9 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Cevap</th>
-                                <th>Kaynak</th>
-                                <th>Benzerlik Oranı</th>
+                                <th class="col-md-6">Cevap</th>
+                                <th class="col-md-4">Kaynak</th>
+                                <th class="col-md-2">Benzerlik Oranı</th>
                             </tr>
                         </thead>
                         <tbody>
