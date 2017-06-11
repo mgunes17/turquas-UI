@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import zemberek.tokenization.TurkishSentenceExtractor;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.*;
 
 /**
@@ -76,8 +77,12 @@ public class GoogleProvider implements Provider {
         try {
             Document document = Jsoup.connect(sourceName).get();
             return document.body().text();
-        } catch (IOException e) {
-            //
+        } catch (MalformedURLException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
 
         return " ";

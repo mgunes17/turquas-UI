@@ -24,6 +24,7 @@
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Test Modu</a></li>
             <li><a href="#">Kullanıcı Modu</a></li>
+            <li><a href="#myModal" data-toggle="modal">Ayarlar</a></li>
         </ul>
     </div>
 </nav>
@@ -33,7 +34,7 @@
             <img src="bird.png" width="200px" height="200px"/>
         </div>
         <div class="col-md-4">
-            <h2 class="text-center">TURQUAS</h2>
+            <h1 class="text-center" style="color: turquoise;">TURQUAS</h1>
         </div>
         <div class="col-md-4" align="right">
             <img src="bird.png" width="200px" height="200px"/>
@@ -62,7 +63,6 @@
                     </div>
                 </c:when>
             </c:choose>
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Ayarlar</button>
 
             <div id="myModal" class="modal fade" role="dialog">
                 <div class="modal-dialog">
@@ -74,7 +74,7 @@
                         <div class="modal-body">
                             <form method="POST" action="/setsearchingparameterlist">
                                 <div class="form-group">
-                                    <label for="threshold">Min Benzerlik Oranı</label>
+                                    <label for="threshold">Min Benzerlik Oranı (0-100)</label>
                                     <input type="number" id="threshold" name="threshold" class="form-control" value="${threshold}">
                                 </div>
                                 <div class="form-group">
@@ -83,8 +83,12 @@
                                     <input type="radio" name="source" value="database"> Veritabanı<br>
                                 </div>
                                 <div class="form-group">
-                                    <label>Gösterilecek Max Cevap Sayısı</label>
+                                    <label>Gösterilecek Max Cevap Sayısı (5-50)</label>
                                     <input type="number" id="answercount" name="answercount" class="form-control" value="${answercount}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Google'da aranacak link sayısı (5-15)</label>
+                                    <input type="number" id="linkcount" name="linkcount" class="form-control" value="${linkcount}">
                                 </div>
                                 <input type="submit" class="btn btn-primary" value="Kaydet"/>
                             </form>
@@ -98,9 +102,19 @@
         </div>
     </div>
     <c:choose>
+        <c:when test="${cevap eq 5}">
+            <div class="alert alert-danger">
+                Soket bağlantısında hata meydana geldi.
+            </div>
+        </c:when>
+        <c:when test="${cevap eq 4}">
+            <div class="alert alert-warning">
+                Aday cümle bulunamadı.
+            </div>
+        </c:when>
         <c:when test="${cevap eq 3}">
             <div class="alert alert-danger">
-                Bir hata meydana geldi.
+                Beklenmedik bir hata oluştu.
             </div>
         </c:when>
         <c:when test="${cevap eq 2}">
@@ -109,48 +123,29 @@
             </div>
         </c:when>
         <c:when test="${cevap eq 1}">
-            <!--<div class="row">
-                <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
                     <table class="table table-hover">
                         <thead>
-                        <tr>
-                            <th>Benzerlik Oranı</th>
-                            <th>Soruların W2V Benzerliği</th>
-                        </tr>
+                            <tr>
+                                <th>Cevap</th>
+                                <th>Kaynak</th>
+                                <th>Benzerlik Oranı</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <c:forEach var="item" items="${similarityList}">
-                            <tr>
-                                <td>${item.value}</td>
-                                <td>${item.questionForCompare.answer}</td>
-                            </tr>
-                        </c:forEach>
+                            <c:forEach var="item" items="${answerList}">
+                                <tr>
+                                    <td>${item.originalAnswer}</td>
+                                    <td>${item.sourceName}</td>
+                                    <td>${item.similarityValue}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
-                <div class="col-md-6">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Benzerlik Oranı</th>
-                            <th>Soru-Cevap Çiftleri(Derin Öğrenme)</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <c:forEach var="item" items="${learningList}">
-                            <tr>
-                                <td>${item.value}</td>
-                                <td>${item.questionForCompare.answer}</td>
-                            </tr>
-                        </c:forEach>
-                        </tbody>
-                    </table>
-                </div>
-            </div> -->
-
-            <c:forEach var="item" items="${answerList}">
-                ${item.originalAnswer} ${item.sourceName} <br/>
-            </c:forEach>
+            </div>
         </c:when>
     </c:choose>
 </div>

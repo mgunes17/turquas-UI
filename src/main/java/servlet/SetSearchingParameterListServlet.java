@@ -21,8 +21,9 @@ public class SetSearchingParameterListServlet extends HttpServlet {
         try {
             int threshold = Integer.parseInt(request.getParameter("threshold"));
             int answerCount = Integer.parseInt(request.getParameter("answercount"));
+            int linkCount = Integer.parseInt(request.getParameter("linkcount"));
             String source = request.getParameter("source");
-            new SearchingParameter().setParameter(threshold, source, answerCount);
+            new SearchingParameter().setParameter(threshold, source, answerCount, linkCount);
             session.setAttribute("set", "1");
             session.setAttribute("threshold", SearchingParameter.getThreshold());
             session.setAttribute("answercount", SearchingParameter.getAnswerCount());

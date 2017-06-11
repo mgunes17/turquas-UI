@@ -20,6 +20,7 @@ public class InitializeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("threshold", SearchingParameter.getThreshold());
         session.setAttribute("answercount", SearchingParameter.getAnswerCount());
+        session.setAttribute("linkcount", SearchingParameter.getLinkCount());
         response.sendRedirect("developermode.jsp");
         new PythonSocket();
     }

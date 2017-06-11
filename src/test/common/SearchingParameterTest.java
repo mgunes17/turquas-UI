@@ -9,9 +9,9 @@ public class SearchingParameterTest extends TestCase {
     private SearchingParameter searchingParameter = new SearchingParameter();
 
     public void testSetParameter() throws Exception {
-        assertEquals(true, searchingParameter.setParameter(100, "google", 15));
+        assertEquals(true, searchingParameter.setParameter(100, "google", 15, 8));
         try {
-            searchingParameter.setParameter(44, "", 11);
+            searchingParameter.setParameter(44, "", 11, 10);
         } catch (SetSearchParameterException ex) {
             assertEquals("Geçersiz parametre", ex.getMessage());
         }

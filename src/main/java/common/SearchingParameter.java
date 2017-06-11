@@ -10,13 +10,16 @@ import data_provider.Provider;
 public class SearchingParameter {
     private static int threshold = 30;
     private static int answerCount = 20;
+    private static int linkCount = 8;
     private static String source = "google";
 
-    public boolean setParameter(int threshold, String source, int answerCount) throws SetSearchParameterException{
-        if(validateThreshold(threshold) && validateSource(source) && validateAnswerCount(answerCount)) {
+    public boolean setParameter(int threshold, String source, int answerCount, int linkCount) throws SetSearchParameterException{
+        if(validateThreshold(threshold) && validateSource(source)
+                && validateAnswerCount(answerCount) && validateLinkCount(linkCount)) {
             SearchingParameter.threshold = threshold;
             SearchingParameter.source = source;
             SearchingParameter.answerCount = answerCount;
+            SearchingParameter.linkCount = linkCount;
             return true;
         } else
             throw new SetSearchParameterException("Geçersiz parametre");
@@ -43,6 +46,10 @@ public class SearchingParameter {
         return (value.equals("google") || value.equals("database"));
     }
 
+    protected boolean validateLinkCount(int value) {
+        return value >=5 && value <= 15;
+    }
+
     public static int getThreshold() {
         return threshold;
     }
@@ -53,5 +60,9 @@ public class SearchingParameter {
 
     public static int getAnswerCount() {
         return answerCount;
+    }
+
+    public static int getLinkCount() {
+        return linkCount;
     }
 }

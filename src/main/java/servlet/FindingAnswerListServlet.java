@@ -39,27 +39,33 @@ public class FindingAnswerListServlet extends HttpServlet {
                 Provider provider = SearchingParameter.getProvider();
                 Set<Answer> candidateSet = provider.findCandidateList(question);
 
-                AnswerOperator answerOperator = new AnswerOperator();
-                answerOperator.preparaForDeepLearningText(candidateSet);
-                Map<String, Answer> candidateMap = answerOperator.convertSetToMap(candidateSet);
-
-                candidateSet = new HashSet<Answer>();
-                for(String answer: candidateMap.keySet())
-                    candidateSet.add(candidateMap.get(answer));
-
-                fileOperator.saveListForDeepLearning(candidateSet);
-
-                //sokete mesaj at ve cevap gelene kdr bekle
-                List<Answer> orderedCandidateList = null;
-                if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
-                    orderedCandidateList = fileOperator.parseOutput(candidateMap);
+                if(candidateSet.size() == 0) {
+                    session.setAttribute("cevap", 4); //Aday cümle bulunamadı
                 } else {
-                    System.out.println("hata oluştu");
-                }
+                    AnswerOperator answerOperator = new AnswerOperator();
+                    answerOperator.preparaForDeepLearningText(candidateSet);
+                    Map<String, Answer> candidateMap = answerOperator.convertSetToMap(candidateSet);
 
-                ////hazır olduktan sonra dosya okunacak
-                session.setAttribute("cevap", 1);
-                session.setAttribute("answerList", orderedCandidateList); //burası değişecek !!!!!
+                    candidateSet = new HashSet<Answer>();
+                    for(String answer: candidateMap.keySet())
+                        candidateSet.add(candidateMap.get(answer));
+
+                    fileOperator.saveListForDeepLearning(candidateSet);
+
+                    //sokete mesaj at ve cevap gelene kdr bekle
+                    List<Answer> orderedCandidateList = null;
+                    if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
+                        orderedCandidateList = fileOperator.parseOutput(candidateMap);
+                    } else {
+                        System.out.println("hata oluştu");
+                        session.setAttribute("cevap", 5); //Soket bağlantı hatası
+
+                    }
+
+                    ////hazır olduktan sonra dosya okunacak
+                    session.setAttribute("cevap", 1);
+                    session.setAttribute("answerList", orderedCandidateList);
+                }
             } catch (Exception ex) {
                 ex.getMessage();
                 ex.printStackTrace();
