@@ -20,13 +20,21 @@ public class SetSearchingParameterListServlet extends HttpServlet {
 
         try {
             int threshold = Integer.parseInt(request.getParameter("threshold"));
-            int answerCount = Integer.parseInt(request.getParameter("answercount"));
-            int linkCount = Integer.parseInt(request.getParameter("linkcount"));
+            int answerCount = Integer.parseInt(request.getParameter("answer_count"));
+            int linkCount = Integer.parseInt(request.getParameter("link_count"));
             String source = request.getParameter("source");
-            new SearchingParameter().setParameter(threshold, source, answerCount, linkCount);
+            String questionWordDeleted = request.getParameter("question_word");
+
+            SearchingParameter searchingParameter = SearchingParameter.getSearchingParameter();
+            searchingParameter.setAnswerCount(answerCount);
+            searchingParameter.setLinkCount(linkCount);
+            searchingParameter.setSource(source);
+            searchingParameter.setThreshold(threshold);
+            searchingParameter.setQuestionWordDeleted(questionWordDeleted);
+
             session.setAttribute("set", "1");
-            session.setAttribute("threshold", SearchingParameter.getThreshold());
-            session.setAttribute("answercount", SearchingParameter.getAnswerCount());
+            session.setAttribute("threshold", threshold);
+            session.setAttribute("answercount", answerCount);
         } catch (Exception ex) {
             ex.getMessage();
             ex.printStackTrace();

@@ -29,28 +29,31 @@ public class FindingAnswerListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         HttpSession session = request.getSession();
+        session.setAttribute("set", "0");
         String questionText = request.getParameter("question").toLowerCase();
         session.setAttribute("question", request.getParameter("question"));
         QuestionOperator questionOperator = new QuestionOperator();
-        FileOperator fileOperator = new FileOperator();
 
         if(!questionOperator.validateQuestion(questionText)) {
             session.setAttribute("cevap", 2);
         } else {
             try {
-                fileOperator.writeUserQuestionToFile(questionText);
+                Provider provider = SearchingParameter.getSearchingParameter().getProvider();
                 QuestionUI questionUI = questionOperator.createQuestion(questionText);
-                Provider provider = SearchingParameter.getProvider();
                 Set<Answer> candidateSet = provider.findCandidateList(questionUI);
 
                 if(candidateSet.size() == 0) {
                     session.setAttribute("cevap", 4); //Aday cümle bulunamadı
                 } else {
+                    //Kullanıcı sorusunu dosyaya yazdır
+                    FileOperator fileOperator = new FileOperator();
+                    fileOperator.writeUserQuestionToFile(questionText);
+
                     AnswerOperator answerOperator = new AnswerOperator();
                     answerOperator.prepareForDeepLearningText(candidateSet);
                     Map<String, Answer> candidateMap = answerOperator.convertSetToMap(candidateSet);
 
-                    candidateSet = new HashSet<Answer>();
+                    candidateSet = new HashSet<>();
                     for(String answer: candidateMap.keySet())
                         candidateSet.add(candidateMap.get(answer));
 
@@ -66,6 +69,8 @@ public class FindingAnswerListServlet extends HttpServlet {
 
                     }
 
+                    orderedCandidateList = orderedCandidateList.subList(0, SearchingParameter.getSearchingParameter().getAnswerCount());
+
                     ////hazır olduktan sonra dosya okunacak
                     session.setAttribute("cevap", 1);
                     session.setAttribute("answerList", orderedCandidateList);
@@ -78,25 +83,6 @@ public class FindingAnswerListServlet extends HttpServlet {
         }
 
         response.sendRedirect("developermode.jsp");
-        /*
-        soruyu al
-        kelimelere ayır
-        kuralları çıkar (isim cümlesi vs)
-
-        parametreler ???
-
-        google dan x tane cümle elde et | dbden x tane cümle elde et
-        x cümleyi dosyaya yaz
-            hepsi lower case
-            stop wordleri temizle
-
-            pythonsal işler soket vs
-
-        dosyadan | soldaki cümle sağdaki benzerlik değeri
-            sınıf yap bunun için 2 alan
-
-         listeyi yazdır
-         */
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

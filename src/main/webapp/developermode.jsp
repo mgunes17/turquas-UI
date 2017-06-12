@@ -23,7 +23,6 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="active"><a href="#">Test Modu</a></li>
-            <li><a href="#">Kullanıcı Modu</a></li>
             <li><a href="#myModal" data-toggle="modal">Ayarlar</a></li>
         </ul>
     </div>
@@ -31,13 +30,13 @@
 <div class="jumbotroncontainer-fluid">
     <div class="row">
         <div class="col-md-4" align="left">
-            <img src="bird.png" width="200px" height="200px"/>
+            <img src="ytulogopng.png" width="150px" height="150px"/>
         </div>
         <div class="col-md-4">
             <h1 class="text-center" style="color: turquoise;">TURQUAS</h1>
         </div>
         <div class="col-md-4" align="right">
-            <img src="bird.png" width="200px" height="200px"/>
+            <img src="bird.png" width="130px" height="130px"/>
         </div>
     </div>
     <div class="row">
@@ -48,7 +47,8 @@
                 <div class="form-group">
                     <label for="questionUI">Sor bakalım..</label>
                     <input type="text" id="questionUI" class="form-control" name="question" value="${question}">
-                    <input type="submit" class="btn btn-primary center-block" value="Cevapla"/>
+                    <br/>
+                    <input type="submit" class="btn btn-primary" value="Cevapla"/>
                 </div>
             </form>
             <c:choose>
@@ -83,18 +83,23 @@
                                     <input type="radio" name="source" value="database"> Veritabanı<br>
                                 </div>
                                 <div class="form-group">
+                                    <label>Soru kelimesi silinsin mi</label><br/>
+                                    <input type="radio" name="question_word" value="no" checked> Hayır<br>
+                                    <input type="radio" name="question_word" value="yes"> Evet<br>
+                                </div>
+                                <div class="form-group">
                                     <label>Gösterilecek Max Cevap Sayısı (5-50)</label>
-                                    <input type="number" id="answercount" name="answercount" class="form-control" value="${answercount}">
+                                    <input type="number" id="answercount" name="answer_count" class="form-control" value="${answercount}">
                                 </div>
                                 <div class="form-group">
                                     <label>Google'da aranacak link sayısı (5-15)</label>
-                                    <input type="number" id="linkcount" name="linkcount" class="form-control" value="${linkcount}">
+                                    <input type="number" id="linkcount" name="link_count" class="form-control" value="${linkcount}">
                                 </div>
                                 <input type="submit" class="btn btn-primary" value="Kaydet"/>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
                         </div>
                     </div>
                 </div>
@@ -139,7 +144,7 @@
                                 <tr>
                                     <td>${item.originalAnswer}</td>
                                     <td>${item.sourceName}</td>
-                                    <td>${item.similarityValue}</td>
+                                    <td><a href="${item.similarityValue}" target="_blank">${item.similarityValue}</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>

@@ -8,24 +8,25 @@ import data_provider.Provider;
  * Created by mustafa on 10.06.2017.
  */
 public class SearchingParameter {
-    private static int threshold = 30;
-    private static int answerCount = 20;
-    private static int linkCount = 8;
-    private static String source = "google";
+    private static SearchingParameter searchingParameter = null;
+    private int threshold = 30;
+    private int answerCount = 20;
+    private int linkCount = 8;
+    private String source = "google";
+    private String questionWordDeleted = "no";
 
-    public boolean setParameter(int threshold, String source, int answerCount, int linkCount) throws SetSearchParameterException{
-        if(validateThreshold(threshold) && validateSource(source)
-                && validateAnswerCount(answerCount) && validateLinkCount(linkCount)) {
-            SearchingParameter.threshold = threshold;
-            SearchingParameter.source = source;
-            SearchingParameter.answerCount = answerCount;
-            SearchingParameter.linkCount = linkCount;
-            return true;
-        } else
-            throw new SetSearchParameterException("Geçersiz parametre");
+    private SearchingParameter() {
+
     }
 
-    public static Provider getProvider() throws NotFoundDataProviderException {
+    public static SearchingParameter getSearchingParameter() {
+        if(searchingParameter == null)
+            searchingParameter = new SearchingParameter();
+
+        return searchingParameter;
+    }
+
+    public Provider getProvider() throws NotFoundDataProviderException {
         if(source.equals("google"))
             return new GoogleProvider();
         else if(source.equals("database"))
@@ -50,19 +51,52 @@ public class SearchingParameter {
         return value >=5 && value <= 15;
     }
 
-    public static int getThreshold() {
+    protected boolean validateQuestionWordDeleted(String questionWordDeleted) {
+        return questionWordDeleted.equals("yes") || questionWordDeleted.equals("no");
+    }
+
+    public int getThreshold() {
         return threshold;
     }
 
-    public static String getSource() {
+    public String getSource() {
         return source;
     }
 
-    public static int getAnswerCount() {
+    public int getAnswerCount() {
         return answerCount;
     }
 
-    public static int getLinkCount() {
+    public int getLinkCount() {
         return linkCount;
+    }
+
+    public void setThreshold(int threshold) {
+        if(validateThreshold(threshold))
+            this.threshold = threshold;
+    }
+
+    public void setAnswerCount(int answerCount) {
+        if(validateAnswerCount(answerCount))
+            this.answerCount = answerCount;
+    }
+
+    public void setLinkCount(int linkCount) {
+        if(validateLinkCount(linkCount))
+            this.linkCount = linkCount;
+    }
+
+    public void setSource(String source) {
+        if(validateSource(source))
+            this.source = source;
+    }
+
+    public String getQuestionWordDeleted() {
+        return questionWordDeleted;
+    }
+
+    public void setQuestionWordDeleted(String questionWordDeleted) {
+        if(validateQuestionWordDeleted(questionWordDeleted))
+            this.questionWordDeleted = questionWordDeleted;
     }
 }

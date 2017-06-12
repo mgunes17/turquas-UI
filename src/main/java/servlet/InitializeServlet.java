@@ -18,9 +18,9 @@ import java.io.IOException;
 public class InitializeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        session.setAttribute("threshold", SearchingParameter.getThreshold());
-        session.setAttribute("answercount", SearchingParameter.getAnswerCount());
-        session.setAttribute("linkcount", SearchingParameter.getLinkCount());
+        session.setAttribute("threshold", SearchingParameter.getSearchingParameter().getThreshold());
+        session.setAttribute("answercount", SearchingParameter.getSearchingParameter().getAnswerCount());
+        session.setAttribute("linkcount", SearchingParameter.getSearchingParameter().getLinkCount());
         response.sendRedirect("developermode.jsp");
         new PythonSocket();
     }
