@@ -85,6 +85,9 @@ public class GoogleProvider implements Provider {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
             ex.printStackTrace();
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
 
         return " ";

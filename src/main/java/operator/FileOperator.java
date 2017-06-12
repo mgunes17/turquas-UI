@@ -12,7 +12,7 @@ import java.util.*;
 public class FileOperator {
 
     public void saveListForDeepLearning(Set<Answer> answerList) {
-        File file = new File(FilePath.WRITED_FILE_NAME);
+        File file = new File(FilePath.WRITTEN_FILE_NAME);
 
         try {
             FileWriter fileWriter = new FileWriter(file);
