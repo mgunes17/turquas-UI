@@ -14,10 +14,11 @@ import java.util.Set;
  */
 @Table(keyspace = ModelVariables.KEYSPACE, name = ModelVariables.SENTENCE_TABLE_NAME)
 public class Sentence {
-    @PartitionKey
+    @ClusteringColumn
     @Column(name = "original_sentence")
     private String originalSentence;
 
+    @PartitionKey
     @Column(name = "source_name")
     private String sourceName;
 

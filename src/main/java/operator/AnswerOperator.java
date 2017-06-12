@@ -27,7 +27,7 @@ public class AnswerOperator {
         return candidateList;
     }
 
-    public void preparaForDeepLearningText(Set<Answer> answerList) {
+    public void prepareForDeepLearningText(Set<Answer> answerList) {
         for(Answer answer: answerList) {
             String sentence = convertDeepLearningInputForm(answer.getOriginalAnswer());
             sentence = eliminateStopWords(sentence);
