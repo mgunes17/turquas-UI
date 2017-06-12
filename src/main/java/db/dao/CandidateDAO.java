@@ -3,9 +3,11 @@ package db.dao;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.mapping.Result;
 import db.accessor.QuestionAccessor;
+import db.accessor.SentenceAccessor;
 import db.configuration.ConnectionConfiguration;
 import db.configuration.MappingManagerConfiguration;
 import model.Question;
+import model.Sentence;
 import model.UniqueWord;
 
 import java.util.*;
@@ -18,6 +20,9 @@ public class CandidateDAO {
     private static final QuestionAccessor questionAccessor = MappingManagerConfiguration
             .getMappingManager()
             .createAccessor(QuestionAccessor.class);
+    private static final SentenceAccessor sentenceAccessor = MappingManagerConfiguration
+            .getMappingManager()
+            .createAccessor(SentenceAccessor.class);
 
     public CandidateDAO() {
         session = ConnectionConfiguration.getSession();
@@ -42,6 +47,27 @@ public class CandidateDAO {
         return questionList;
     }
 
+    public List<Sentence> getSentences(String[] words){
+        List<String> sourceList = findSources(words);
+
+        return findSentencesInSources(sourceList);
+    }
+
+    private List<Sentence> findSentencesInSources(List<String> sourceList){
+        List<String> sourceNames = new ArrayList<>();
+        List<Sentence> sentenceList = new ArrayList<>();
+
+        sourceNames.addAll(sourceList);
+
+        Result<Sentence> result = sentenceAccessor.getSentencesBySources(sourceNames);
+        for(Sentence sentence: result) {
+            sentenceList.add(sentence);
+        }
+
+        return sentenceList;
+    }
+
+
     private List<String> findSources(String[] words){
         List<String> sourceList = new ArrayList<>();
         Map<String, Integer> sourceCount = new HashMap<>();
@@ -51,7 +77,7 @@ public class CandidateDAO {
                 UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
                 if(uniqueWord != null) {
                     for(String sourceName: uniqueWord.getValueMap().keySet()) {
-                        if(uniqueWord.getValueMap().get(sourceName) > 1) {
+                        if(uniqueWord.getValueMap().get(sourceName) > 0) {
                            if(sourceCount.containsKey(sourceName))
                                sourceCount.put(sourceName, sourceCount.get(sourceName) + 1);
                            else
@@ -68,7 +94,7 @@ public class CandidateDAO {
 
         for(String source: sourceCount.keySet()) {
             //if(sourceCount.get(source) == words.length - i)
-            if(sourceCount.get(source) >= (words.length - i) * 0.8)
+            if(sourceCount.get(source) >= (words.length - i) * 0.0)
                 sourceList.add(source);
         }
 

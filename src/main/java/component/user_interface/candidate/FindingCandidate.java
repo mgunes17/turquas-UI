@@ -5,6 +5,7 @@ import db.dao.W2VTokenDAO;
 import home_base.Turquas;
 import model.Question;
 import model.QuestionForCompare;
+import model.Sentence;
 import nlp_tool.zemberek.ZemberekSentenceAnalyzer;
 import zemberek.morphology.analysis.SentenceAnalysis;
 import zemberek.morphology.analysis.WordAnalysis;
@@ -39,6 +40,45 @@ public class FindingCandidate {
 
         return prepareListDeepLearning(questionList); // sentence ve source işlemleri ortak olarak candidate daoda olacak
     }
+
+
+    public List<QuestionForCompare> findSentencesForDeepLearning(String userQuestion){
+        List<Sentence> sentenceList = getSentencesFromDatabase(userQuestion);
+
+        return prepareSentenceListForDeepLearning(sentenceList);
+    }
+
+    private List<QuestionForCompare> prepareSentenceListForDeepLearning(List<Sentence> sentenceList){
+        List<QuestionForCompare> questionForCompareList = new ArrayList<>();
+        for(Sentence sentence: sentenceList){
+            QuestionForCompare qfc = new QuestionForCompare();
+            qfc.setAnswer(sentence.getOriginalSentence());
+            qfc.setSourceName(sentence.getSourceName());
+            questionForCompareList.add(qfc);
+        }
+
+        return questionForCompareList;
+    }
+
+
+    private List<Sentence> getSentencesFromDatabase(String userQuestion){
+        TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();
+        SentenceAnalysis analysis = analyzer.analyze(userQuestion);
+        analyzer.disambiguate(analysis);
+
+        List<String> wordList = new ArrayList<>();
+        for (SentenceAnalysis.Entry entry : analysis) {
+            WordAnalysis wordAnalysis = entry.parses.get(0);
+            wordList.add(wordAnalysis.dictionaryItem.lemma);
+        }
+        String[] words = wordList.toArray(new String[wordList.size()]);
+
+        // stop wordleri sil
+
+
+        return candidateDAO.getSentences(words);
+    }
+
 
     private List<Question> getQuestionsFromDatabase(String userQuestion, boolean nounClause){
         TurkishSentenceAnalyzer analyzer = ZemberekSentenceAnalyzer.getSentenceAnalyzer();

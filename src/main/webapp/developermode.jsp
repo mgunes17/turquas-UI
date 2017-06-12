@@ -44,7 +44,7 @@
         <div class="col-md-4">
         </div>
         <div class="col-md-4">
-            <form method="POST" action="/findinganswers">
+            <form method="POST" action="findinganswers">
                 <div class="form-group">
                     <label for="questionUI">Sor bakalım..</label>
                     <input type="text" id="questionUI" class="form-control" name="question" value="${question}">
@@ -72,7 +72,7 @@
                             <h4 class="modal-title">Arama Parametreleri</h4>
                         </div>
                         <div class="modal-body">
-                            <form method="POST" action="/setsearchingparameterlist">
+                            <form method="POST" action="setsearchingparameterlist">
                                 <div class="form-group">
                                     <label for="threshold">Min Benzerlik Oranı (0-100)</label>
                                     <input type="number" id="threshold" name="threshold" class="form-control" value="${threshold}">

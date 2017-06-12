@@ -17,10 +17,9 @@ public class CassandraProvider implements Provider {
     public Set<Answer> findCandidateList(QuestionUI questionUI) {
         FindingCandidate findingCandidate = new FindingCandidate("token_average");
         List<QuestionForCompare> questionForCompareList = findingCandidate
-                .findCandidatesForDeepLearning(questionUI.getQuestion(), new SentenceType().isNounClause(questionUI.getQuestion()));
+                .findSentencesForDeepLearning(questionUI.getQuestion());
 
-        Set<Answer> answerSet = convertQuestionForCompareToAnswer(questionForCompareList);
-        return answerSet;
+        return convertQuestionForCompareToAnswer(questionForCompareList);
     }
 
     protected Set<Answer> convertQuestionForCompareToAnswer(List<QuestionForCompare> questionForCompareList) {

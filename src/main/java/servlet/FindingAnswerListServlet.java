@@ -47,7 +47,7 @@ public class FindingAnswerListServlet extends HttpServlet {
                     session.setAttribute("cevap", 4); //Aday cümle bulunamadı
                 } else {
                     AnswerOperator answerOperator = new AnswerOperator();
-                    answerOperator.preparaForDeepLearningText(candidateSet);
+                    answerOperator.prepareForDeepLearningText(candidateSet);
                     Map<String, Answer> candidateMap = answerOperator.convertSetToMap(candidateSet);
 
                     candidateSet = new HashSet<Answer>();

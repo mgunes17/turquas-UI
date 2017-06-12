@@ -40,10 +40,10 @@ CREATE TABLE sentence (
 	stemmed_words_list list<text>,
 	tags set<text>,
 	token_list list<text>,
-	PRIMARY KEY (original_sentence)
+	PRIMARY KEY (source_name, original_sentence)
 );
 
-CREATE INDEX source_name ON sentence (source_name);
+CREATE INDEX sentence_index ON sentence (original_sentence);
 
 CREATE TABLE question (
     source_name text,
