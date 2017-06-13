@@ -1,5 +1,6 @@
 package component.user_interface.candidate;
 
+import common.StopWord;
 import db.dao.CandidateDAO;
 import db.dao.W2VTokenDAO;
 import home_base.Turquas;
@@ -72,11 +73,21 @@ public class FindingCandidate {
             wordList.add(wordAnalysis.dictionaryItem.lemma);
         }
         String[] words = wordList.toArray(new String[wordList.size()]);
+        String[] cleanWords = removeStopWords(words);
 
-        // stop wordleri sil
+        return candidateDAO.getSentences(cleanWords);
+    }
 
 
-        return candidateDAO.getSentences(words);
+    private String[] removeStopWords(String[] words){
+        List<String> newWordList = new ArrayList<>();
+        for(String word: words) {
+            if(!StopWord.STOP_WORD_SET.contains(word)) {
+                newWordList.add(word);
+            }
+        }
+
+        return newWordList.toArray(new String[0]);
     }
 
 

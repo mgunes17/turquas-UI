@@ -67,7 +67,6 @@ public class CandidateDAO {
         return sentenceList;
     }
 
-
     private List<String> findSources(String[] words){
         List<String> sourceList = new ArrayList<>();
         Map<String, Integer> sourceCount = new HashMap<>();
@@ -76,12 +75,14 @@ public class CandidateDAO {
             if(!word.equals("")){
                 UniqueWord uniqueWord = MappingManagerConfiguration.getUniqueWordMapper().get(word);
                 if(uniqueWord != null) {
-                    for(String sourceName: uniqueWord.getValueMap().keySet()) {
-                        if(uniqueWord.getValueMap().get(sourceName) > 0) {
-                           if(sourceCount.containsKey(sourceName))
-                               sourceCount.put(sourceName, sourceCount.get(sourceName) + 1);
-                           else
-                               sourceCount.put(sourceName, 1);
+                    if(uniqueWord.getValueMap() != null){
+                        for(String sourceName: uniqueWord.getValueMap().keySet()) {
+                            if(uniqueWord.getValueMap().get(sourceName) > 0) {
+                                if(sourceCount.containsKey(sourceName))
+                                    sourceCount.put(sourceName, sourceCount.get(sourceName) + 1);
+                                else
+                                    sourceCount.put(sourceName, 1);
+                            }
                         }
                     }
                 } else {

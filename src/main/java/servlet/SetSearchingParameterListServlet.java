@@ -35,6 +35,7 @@ public class SetSearchingParameterListServlet extends HttpServlet {
             session.setAttribute("set", "1");
             session.setAttribute("threshold", threshold);
             session.setAttribute("answercount", answerCount);
+            session.setAttribute("linkcount", answerCount);
         } catch (Exception ex) {
             ex.getMessage();
             ex.printStackTrace();
