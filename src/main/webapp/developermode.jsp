@@ -170,8 +170,8 @@
         </c:when>
         <c:when test="${cevap eq 1}">
             <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-10">
+                <div class="col-md-6">
+                    <h3>LSTM ile Benzerlik</h3>
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -182,7 +182,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="item" items="${answerList}" varStatus="myIndex">
+                            <c:forEach var="item" items="${dlAnswerList}" varStatus="myIndex">
                                 <tr>
                                     <td>${myIndex.index + 1}</td>
                                     <td>${item.originalAnswer}</td>
@@ -190,6 +190,29 @@
                                     <td>${item.similarityValue}</td>
                                 </tr>
                             </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-6">
+                    <h3>W2V Average Benzerliği</h3>
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col-md-1">Sıra</th>
+                            <th class="col-md-5">Cevap</th>
+                            <th class="col-md-4">Kaynak</th>
+                            <th class="col-md-2">Benzerlik Oranı</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach var="item" items="${wsAnswerList}" varStatus="myIndex">
+                            <tr>
+                                <td>${myIndex.index + 1}</td>
+                                <td>${item.originalAnswer}</td>
+                                <td><a href="${item.sourceName}" target="_blank">${item.sourceName}</a></td>
+                                <td>${item.similarityValue}</td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
                 </div>

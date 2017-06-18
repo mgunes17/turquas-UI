@@ -73,24 +73,41 @@ public class FindingAnswerListServlet extends HttpServlet {
 
                     statisticValue.setTotalCandidateCount(candidateSet.size());
                     start_time = System.nanoTime();
-                    List<Answer> orderedCandidateList = null;
+
+                    // LSTM ile cevap listesini bul
+                    List<Answer> dlOrderedCandidateList = null;
                     if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
-                        orderedCandidateList = fileOperator.parseOutput(candidateMap);
+                        dlOrderedCandidateList = fileOperator.parseOutput(candidateMap);
                     } else {
                         System.out.println("hata oluştu");
                         session.setAttribute("cevap", 5); //Soket bağlantı hatası
 
                     }
+
+                    // W2V average similarity
+                    List<Answer> wsOrderedCandidateList = null;
+                    if(PythonSocket.askForPrediction()){ // hazırsa ve başarılıysa cevapları dosyadan oku
+                        wsOrderedCandidateList = fileOperator.parseOutput(candidateMap);
+                    } else {
+                        System.out.println("hata oluştu");
+                        session.setAttribute("cevap", 5); //Soket bağlantı hatası
+
+                    }
+
                     end_time = System.nanoTime();
-                    pythonDiff = (end_time - start_time)/1e6;
+                    pythonDiff = (end_time - start_time) / 1e6;
                     System.out.println("python cevap verilmesi" + pythonDiff);
                     statisticValue.setPythonAnswerTime(pythonDiff);
 
-                    if(orderedCandidateList.size() > SearchingParameter.getSearchingParameter().getAnswerCount())
-                        orderedCandidateList = orderedCandidateList.subList(0, SearchingParameter.getSearchingParameter().getAnswerCount());
+                    if(dlOrderedCandidateList.size() > SearchingParameter.getSearchingParameter().getAnswerCount())
+                        dlOrderedCandidateList = dlOrderedCandidateList.subList(0, SearchingParameter.getSearchingParameter().getAnswerCount());
+
+                    if(wsOrderedCandidateList.size() > SearchingParameter.getSearchingParameter().getAnswerCount())
+                        wsOrderedCandidateList = wsOrderedCandidateList.subList(0, SearchingParameter.getSearchingParameter().getAnswerCount());
 
                     session.setAttribute("cevap", 1);
-                    session.setAttribute("answerList", orderedCandidateList);
+                    session.setAttribute("dlAnswerList", dlOrderedCandidateList);
+                    session.setAttribute("wsAnswerList", wsOrderedCandidateList);
                 }
             } catch (Exception ex) {
                 ex.getMessage();
