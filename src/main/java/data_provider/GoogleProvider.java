@@ -1,5 +1,6 @@
 package data_provider;
 
+import common.SearchingParameter;
 import model.Answer;
 import model.QuestionUI;
 import operator.AnswerOperator;
@@ -20,7 +21,7 @@ import java.util.Set;
  */
 public class GoogleProvider implements Provider {
     private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
-    private static final int RESULT_LINK_COUNT = 5;
+    private static final int RESULT_LINK_COUNT = SearchingParameter.getSearchingParameter().getLinkCount();
 
     public Set<Answer> findCandidateList(QuestionUI questionUI) throws IOException {
         String searchableForm = convertSearchableForm(questionUI.getQuestion());
@@ -50,7 +51,9 @@ public class GoogleProvider implements Provider {
             String linkHref = result.attr("href");
             String linkText = result.text();
             System.out.println("Text::" + linkText + ", Url:" + linkHref.substring(7, linkHref.indexOf("&")));
-            sourceLinks.add(linkHref.substring(7, linkHref.indexOf("&")));
+            if(!linkHref.contains("wikipedia")){
+                sourceLinks.add(linkHref.substring(7, linkHref.indexOf("&")));
+            }
         }
 
         return sourceLinks;

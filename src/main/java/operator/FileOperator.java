@@ -41,7 +41,6 @@ public class FileOperator {
 
             boolean finished = false;
             while (!finished) {
-                System.out.println(answer);
                 Answer answer1 = answerMap.get(answer);
                 answer1.setSimilarityValue(similarity);
                 answerList.add(answerMap.get(answer));

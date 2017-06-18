@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: mustafa
@@ -34,6 +35,44 @@
         </div>
         <div class="col-md-4">
             <h1 class="text-center" style="color: turquoise;">TURQUAS</h1>
+            <div class="panel panel-primary">
+                <div class="panel-heading">İstatistikler</div>
+                <div class="panel-body">
+                    <table class="table table-hover">
+                        <tbody>
+                            <tr>
+                                <th>Toplam Süre</th>
+                                <td><fmt:formatNumber type = "number"
+                                                      maxFractionDigits = "3"
+                                                      value = "${istatistik.totalAnswerTime}" /> ms</td>
+                            </tr>
+                            <tr>
+                                <th>Aday Cümle Çekilmesi</th>
+                                <td><fmt:formatNumber type = "number"
+                                                      maxFractionDigits = "3"
+                                                      value = "${istatistik.candidateFetchTime}" /> ms</td>
+                            </tr>
+                            <tr>
+                                <th>Python'dan Cevap Alınması</th>
+                                <td><fmt:formatNumber type = "number"
+                                                      maxFractionDigits = "3"
+                                                      value = "${istatistik.pythonAnswerTime}" /> ms</td>
+                            </tr>
+                            <tr>
+                                <th>Diğer İşlemler</th>
+                                <td><fmt:formatNumber type = "number"
+                                                      maxFractionDigits = "3"
+                                                      value = "${istatistik.otherTime}" /> ms</td>
+                            </tr>
+                            <tr>
+                                <th>Toplam Aday Sayısı</th>
+                                <td>${istatistik.totalCandidateCount} cümle</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
         </div>
         <div class="col-md-4" align="right">
             <img src="bird.png" width="130px" height="130px"/>
@@ -89,11 +128,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Gösterilecek Max Cevap Sayısı (5-50)</label>
-                                    <input type="number" id="answercount" name="answer_count" class="form-control" value="${answercount}">
+                                    <input type="number" id="answercount" name="answer_count" class="form-control"
+                                           max="50" min="5" value="${answercount}">
                                 </div>
                                 <div class="form-group">
                                     <label>Google'da aranacak link sayısı (5-15)</label>
-                                    <input type="number" id="linkcount" name="link_count" class="form-control" value="${linkcount}">
+                                    <input type="number" id="linkcount" name="link_count" class="form-control"
+                                            max="15" min="5" value="${linkcount}">
                                 </div>
                                 <input type="submit" class="btn btn-primary" value="Kaydet"/>
                             </form>
@@ -129,22 +170,24 @@
         </c:when>
         <c:when test="${cevap eq 1}">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th class="col-md-6">Cevap</th>
+                                <th class="col-md-1">Sıra</th>
+                                <th class="col-md-5">Cevap</th>
                                 <th class="col-md-4">Kaynak</th>
                                 <th class="col-md-2">Benzerlik Oranı</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="item" items="${answerList}">
+                            <c:forEach var="item" items="${answerList}" varStatus="myIndex">
                                 <tr>
+                                    <td>${myIndex.index + 1}</td>
                                     <td>${item.originalAnswer}</td>
-                                    <td>${item.sourceName}</td>
-                                    <td><a href="${item.similarityValue}" target="_blank">${item.similarityValue}</a></td>
+                                    <td><a href="${item.sourceName}" target="_blank">${item.sourceName}</a></td>
+                                    <td>${item.similarityValue}</td>
                                 </tr>
                             </c:forEach>
                         </tbody>
