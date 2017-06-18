@@ -52,8 +52,10 @@ public class AnswerOperator {
             }
         }
 
-        returnedSentence.deleteCharAt(returnedSentence.length() - 1);
-        return returnedSentence.toString();
+        if(returnedSentence.length() != 0){
+            returnedSentence.deleteCharAt(returnedSentence.length() - 1);
+            return returnedSentence.toString();
+        } else return "";
     }
 
     protected boolean validateLanguage(String sentence) {

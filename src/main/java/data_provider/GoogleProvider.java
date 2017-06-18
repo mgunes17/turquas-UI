@@ -51,7 +51,9 @@ public class GoogleProvider implements Provider {
             String linkHref = result.attr("href");
             String linkText = result.text();
             System.out.println("Text::" + linkText + ", Url:" + linkHref.substring(7, linkHref.indexOf("&")));
-            sourceLinks.add(linkHref.substring(7, linkHref.indexOf("&")));
+            if(!linkHref.contains("wikipedia")){
+                sourceLinks.add(linkHref.substring(7, linkHref.indexOf("&")));
+            }
         }
 
         return sourceLinks;
